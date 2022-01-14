@@ -12,7 +12,7 @@ def main():
 
 	## Stage 1: Image the disk
 
-	# image_disk(config)
+	image_disk(config)
 	config.update_install_devices()
 
 	## Stage 2: Perform customization actions.
