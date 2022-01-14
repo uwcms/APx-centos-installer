@@ -1,0 +1,4 @@
+*.py[czo]
+__pycache__
+/pkg
+/venv
