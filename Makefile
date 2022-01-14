@@ -8,7 +8,7 @@ dep: pkg/.canary
 pkg/.canary:
 	rm -rf pkg
 	mkdir pkg
-	pip3 install --target "$(PWD)/pkg" tqdm requests pyyaml pydantic
+	pip3 install --target "$(PWD)/pkg" -r requirements.txt
 	touch pkg/.canary
 
 clean:
