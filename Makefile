@@ -1,6 +1,7 @@
 package: dep
 	rm -rf pkg/centos_installer ; mkdir pkg/centos_installer
 	for I in centos_installer/*.py; do ln -snf "../../$$I" pkg/centos_installer/; done
+	find pkg -name '*.so' -delete
 	python3 -m zipapp --output centos-installer.pyz --python '/usr/bin/env python3' -m centos_installer:main $(PWD)/pkg
 
 dep: pkg/.canary
