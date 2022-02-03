@@ -47,6 +47,7 @@ class Configuration(object):
 	manifest_loc: str
 	manifest_hash: Optional[str]
 	fetch_base: str
+	skip_image: bool
 	manifest_vars: Dict[str, str]
 	manifest: Manifest
 
@@ -73,6 +74,11 @@ class Configuration(object):
 		    help='The URL to which all other manifest URLs are relative (overrides manifest fetch_base)'
 		)
 		parser.add_argument(
+		    '--skip-image',
+		    action='store_true',
+		    help='Skip the image download, but still run configuration steps (useful for manifest debugging)'
+		)
+		parser.add_argument(
 		    'manifest_vars',
 		    nargs='*',
 		    type=str,
@@ -85,6 +91,7 @@ class Configuration(object):
 		self.manifest_loc = ARGS.manifest
 		self.manifest_hash = ARGS.manifest_hash
 		self.fetch_base = ARGS.fetch_base
+		self.skip_image = ARGS.skip_image
 
 		self.manifest_vars: Dict[str, str] = {}
 		for arg in ARGS.manifest_vars:

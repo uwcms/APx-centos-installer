@@ -189,6 +189,8 @@ class OperationDownload(Operation, pydantic.BaseModel):
 			pipeline = IncrementalTQDMProxy(pipeline, progress)
 			# Fill it with data.
 			rsp = requests.get(urllib.parse.urljoin(config.manifest.fetch_base, self.source), stream=True)
+			if rsp.status_code != 200:
+				fail(f'Unable to fetch file from {self.source}: HTTP {rsp.status_code}')
 			with pipeline:
 				for chunk in rsp.iter_content(config.block_size):
 					pipeline.write(chunk)
@@ -205,6 +207,7 @@ class OperationDownload(Operation, pydantic.BaseModel):
 				    f'Actual SHA256:   {hasher.hash.hexdigest()}\n'
 				    f'Target file deleted.'
 				)
+			target.abspath.chmod(int(self.mode, 8))
 
 
 class OperationSed(Operation, pydantic.BaseModel):
@@ -347,6 +350,9 @@ CustomizationOperation = Annotated[Union[OperationMount,
 
 
 def image_disk(config: 'Configuration') -> None:
+	if config.skip_image:
+		print('Skipping the disk image process, per --skip-image.')
+		return
 	try:
 		rawdisk = open(config.device, 'r+b', buffering=config.block_size)
 	except Exception as e:
